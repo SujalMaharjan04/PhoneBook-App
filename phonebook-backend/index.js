@@ -3,7 +3,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
 app.use(cors());
-app.use(express.static("dist"));
+
 
 
 let data =[
@@ -35,6 +35,7 @@ app.get('/api/persons', (request, response) => {
     response.json(data);
 })
 
+app.use(express.static("dist"));
 
 //Exercise 3.2
 
