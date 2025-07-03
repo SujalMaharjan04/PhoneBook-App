@@ -2,8 +2,10 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
-app.use(cors());
 
+app.use(cors());
+app.use(express.json());
+app.use(express.static("dist"));
 
 
 let data =[
@@ -35,7 +37,7 @@ app.get('/api/persons', (request, response) => {
     response.json(data);
 })
 
-app.use(express.static("dist"));
+
 
 //Exercise 3.2
 
@@ -72,7 +74,7 @@ app.delete('/api/persons/:id', (request, response) => {
 
 //Exercise 3.5
 
-app.use(express.json());
+
 morgan.token("body", (req, res) => {
         return JSON.stringify(req.body);
     })
