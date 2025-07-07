@@ -1,41 +1,23 @@
+require('dotenv').config();
+const Person = require('./modules/phone');
 const express = require("express");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const cors = require("cors");
+const phone = require('./modules/phone');
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 app.use(express.static("dist"));
 
 
-let data =[
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
 //Exercise 3.1
 
 app.get('/api/persons', (request, response) => {
-    response.json(data);
+    Person.find({}).then(result => {
+        response.json(result);
+    })
 })
+
 
 
 
@@ -75,37 +57,37 @@ app.delete('/api/persons/:id', (request, response) => {
 //Exercise 3.5
 
 
-morgan.token("body", (req, res) => {
-        return JSON.stringify(req.body);
-    })
-app.use(morgan(":method :url :status :res[content-length] :response-time ms :body"));
+// morgan.token("body", (req, res) => {
+//         return JSON.stringify(req.body);
+//     })
+// app.use(morgan(":method :url :status :res[content-length] :response-time ms :body"));
 app.post('/api/persons', (req, res) => {
-    let id;
-    do {
-        id = Math.floor(Math.random() * 200000).toString();
-    } while (data.find(n => n.id === id));
+    // let id;
+    // do {
+    //     id = Math.floor(Math.random() * 200000).toString();
+    // } while (data.find(n => n.id === id));
 
     const body = req.body;
     
-    const checkName = data.find(n => n.name === body.name);
+    // const checkName = data.find(n => n.name === body.name);
     if (!body.name || !body.number) {
         return res.status(400).json({
             error: "No Name or Number"
         })
-    } else if (checkName) {
-        return res.status(400).json({
-            error: "Name should be unique"
-        })
+    // } else if (checkName) {
+    //     return res.status(400).json({
+    //         error: "Name should be unique"
+    //     })
     }
 
-    const person = {
-        id : id,
+    const person = new Person({
         name: body.name,
-        number: body.number
-    }
+        number: body.number.toString(),
+    });
 
-    data.push(person);    
-    res.json(data)
+    person.save().then(result => {
+        res.json(result);
+    })   
 
    
 })

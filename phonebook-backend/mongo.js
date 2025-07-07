@@ -15,17 +15,7 @@ mongoose.connect(url);
 
 
 
-const bookSchema = mongoose.Schema({
-    name: String,
-    number: String,
-});
 
-const Book = mongoose.model('Person', bookSchema);
-
-const people = new Book({
-    name: name,
-    number: number,
-})
 
 if (!process.argv[3] && !process[4]) {
     Book.find({}).then(result => {
