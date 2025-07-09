@@ -64,12 +64,16 @@ const App = () => {
                 setMessage(null)
               }, 5000)
               setPersons(persons.map(person => person.id !== existingPerson.id ? person : requestedData))
+              setNewPerson('');
+              setNewNumber('');
             })
             .catch(error => {
               setMessage(`Information about ${newObject.name} has already been removed from the server`)
               setTimeout(() => {
                 setMessage(null)
               }, 5000)
+              setNewPerson('');
+              setNewNumber('');
             })
       }
     }else{
