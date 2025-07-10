@@ -21,13 +21,18 @@ app.get('/api/persons', (request, response) => {
 
 //Exercise 3.2
 
-// app.get('/info', (request, response) => {
-//     const count = data.length;
-//     const date = new Date();
+app.get('/info', (request, response) => {
+    Person.find({}).then(result => {
+        const count = result.length;
 
-//     response.send(`<h3>Phonebook has info for ${count} people</h3><br>
-//         ${date.toDateString()} ${date.toTimeString()}`)
-// })
+        const date = new Date();
+
+        response.send(`<h3>Phonebook has info for ${count} people</h3><br>
+        ${date.toDateString()} ${date.toTimeString()}`)
+    })
+    
+    
+})
 
 
 //Exercise 3.3
