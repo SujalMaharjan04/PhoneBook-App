@@ -38,7 +38,6 @@ const App = () => {
     bookService
       .getAll()
       .then(requestedData => {
-        console.log(requestedData)
         setPersons(requestedData)
       })
   }, [])
@@ -88,9 +87,17 @@ const App = () => {
           setNewNumber('')
           setNewPerson('')
         })
+        .catch(error => {
+          if (error.response && error.response.data && error.response.data.error) {
+            setMessage(error.response.data.error);
+            setNewPerson('');
+            setNewNumber('');
+          }
+          setTimeout(() => setMessage(null), 5000);
+        })
+        }
         
     }
-  }
 
   //function to add name
   const handleClick = (event) => {

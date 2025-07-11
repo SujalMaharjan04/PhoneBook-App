@@ -45,7 +45,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 //Exercise 3.4
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id).then(result => {
         if (result) {
             return response.status(204).end();
@@ -63,7 +63,7 @@ app.delete('/api/persons/:id', (request, response) => {
 // app.use(morgan(":method :url :status :res[content-length] :response-time ms :body"));
 
 //Post Operation Function
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     // let id;
     // do {
     //     id = Math.floor(Math.random() * 200000).toString();
@@ -84,15 +84,13 @@ app.post('/api/persons', (req, res) => {
 
     person.save().then(result => {
         res.json(result);
-    })   
-
-   
-})
+    }).catch(err => next(err));      
+});
 
 
 
 //Put operation function
-app.put('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
     const {name, number} = req.body;
     Person.findById(req.params.id).then(person => {
         person.name = name;
@@ -114,7 +112,9 @@ const errorHandler = (err, req, res, next) => {
     console.error(err.message);
 
     if (err.name === "CastError") {
-        return res.status(400).send({error: 'Malformatted id'});
+        return res.status(400).json({error: 'Malformatted id'});
+    } else if (err.name === "ValidationError") {
+        return res.status(400).json({error: err.message})
     }
 
     next(err);
