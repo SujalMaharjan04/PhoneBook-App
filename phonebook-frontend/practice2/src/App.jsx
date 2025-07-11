@@ -67,12 +67,19 @@ const App = () => {
               setNewNumber('');
             })
             .catch(error => {
-              setMessage(`Information about ${newObject.name} has already been removed from the server`)
-              setTimeout(() => {
-                setMessage(null)
-              }, 5000)
-              setNewPerson('');
+              if (error.response && error.response.data && error.response.data.error) {
+                setMessage(`${error.response.data.error}`);
+                
+              } else {
+                setMessage(`Information about ${newObject.name} has already been removed from the server`)
+              }
               setNewNumber('');
+              setNewPerson('');
+
+              setTimeout(() => {
+              setMessage(null)
+              }, 5000);
+              
             })
       }
     }else{

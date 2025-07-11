@@ -16,7 +16,13 @@ const bookSchema = mongoose.Schema({
         type: String,
         minlength: 3,
         required: true},
-    number: String,
+    number: {
+        type: String,
+        validate: {validator: function (v) {
+            return /\d{3}-[0-9]*$/.test(v);
+        }},
+        required: true,
+        minlength: 8},
 });
 
 bookSchema.set("toJSON", {
